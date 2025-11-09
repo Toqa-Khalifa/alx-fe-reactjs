@@ -1,32 +1,33 @@
+// src/components/MainContent.jsx
 import React from 'react';
 
-function MainContent() {
+export default function MainContent() {
   const mainStyle = {
-    backgroundColor: '#f4f4f4',
-    padding: '20px',
-    textAlign: 'center',
-    fontFamily: 'Arial, sans-serif',
+    padding: '18px',
+    margin: '12px auto',
+    maxWidth: '900px',
+    backgroundColor: 'white',
+    borderRadius: '8px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.06)'
   };
 
-  const paragraphStyle = {
-    color: '#333',
-    fontSize: '18px',
+  const heading = {
+    marginTop: 0,
+    color: '#222'
+  };
+
+  const paragraph = {
     lineHeight: '1.6',
+    color: '#444'
   };
 
   return (
     <main style={mainStyle}>
-      <h2 style={{ color: 'navy', marginBottom: '10px' }}>Top Cities to Visit</h2>
-      <p style={paragraphStyle}>
-        Traveling opens up new perspectives and experiences. Here are some of my favorite cities:
+      <h2 style={heading}>Welcome!</h2>
+      <p style={paragraph}>
+        This is the main content. Try adding or editing the user profile component and see the inline
+        styles applied instantly.
       </p>
-      <ul style={{ listStyleType: 'none', padding: 0 }}>
-        <li style={{ margin: '5px 0', color: '#555' }}>Cairo</li>
-        <li style={{ margin: '5px 0', color: '#555' }}>Paris</li>
-        <li style={{ margin: '5px 0', color: '#555' }}>Tokyo</li>
-      </ul>
     </main>
   );
 }
-
-export default MainContent;
