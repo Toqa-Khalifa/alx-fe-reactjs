@@ -1,22 +1,18 @@
-// 1. Import the useContext hook
-import React, { useContext } from 'react';
-// 2. Import the UserContext
-import UserContext from './UserContext'; // Adjust path if UserContext.js is not in the same directory
+import React, { useContext } from 'react'; // Import useContext
+import UserContext from './UserContext'; // Import the context object
 
-// This component no longer accepts props
+// 7. Component no longer accepts { userData } as a prop
 function UserDetails() {
-  // 3. Consume the context to get the userData
+  // 8. Consume the context to get the data directly
   const userData = useContext(UserContext);
 
-  // Add a guard clause in case context isn't provided (good practice)
-  if (!userData) {
-    return <div>Loading user data...</div>;
-  }
-
   return (
-    <div>
-      <p>Name: {userData.name}</p>
-      <p>Email: {userData.email}</p>
+    <div style={{ padding: '15px', border: '1px solid #eee', borderRadius: '4px', backgroundColor: '#e9f7ef' }}>
+      <h4>User Details (Level 3 - Context Consumer)</h4>
+      <p style={{ fontWeight: 'bold' }}>Data Retrieved via Context API:</p>
+      {/* 9. Use the data from the context object */}
+      <p>Name: <span style={{ color: '#28a745', fontWeight: 'bold' }}>{userData.name}</span></p>
+      <p>Email: <span style={{ color: '#28a745' }}>{userData.email}</span></p>
     </div>
   );
 }

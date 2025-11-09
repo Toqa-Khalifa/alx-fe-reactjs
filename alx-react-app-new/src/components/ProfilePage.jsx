@@ -1,9 +1,16 @@
-import UserInfo from './UserInfo';
+import React, { useContext } from 'react';
+import UserContext from './UserContext';
 
-// Remove the { userData } prop from the function signature
 function ProfilePage() {
-  // Remove userData={userData} from the JSX
-  return <UserInfo />;
+  const user = useContext(UserContext);
+
+  return (
+    <div>
+      <h2>{user.name}</h2>
+      <p>Age: {user.age}</p>
+      <p>Bio: {user.bio}</p>
+    </div>
+  );
 }
 
 export default ProfilePage;
