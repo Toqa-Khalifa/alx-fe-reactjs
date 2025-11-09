@@ -1,46 +1,30 @@
 import React from 'react';
 
-function MainContent({ children }) {
+function MainContent() {
+  const mainStyle = {
+    backgroundColor: '#f4f4f4',
+    padding: '20px',
+    textAlign: 'center',
+    fontFamily: 'Arial, sans-serif',
+  };
+
+  const paragraphStyle = {
+    color: '#333',
+    fontSize: '18px',
+    lineHeight: '1.6',
+  };
+
   return (
-    <main
-      style={{
-        padding: '24px',
-        maxWidth: '1000px',
-        margin: '20px auto',
-        backgroundColor: '#ffffff',
-        minHeight: '240px',
-        textAlign: 'left',
-        boxSizing: 'border-box'
-      }}
-    >
-      <div
-        style={{
-          display: 'flex',
-          gap: '16px',
-          flexWrap: 'wrap',
-          alignItems: 'flex-start',
-          justifyContent: 'center'
-        }}
-      >
-        {children && React.Children.count(children) > 0 ? (
-          children
-        ) : (
-          <div
-            style={{
-              width: '100%',
-              padding: '18px',
-              border: '1px dashed #ddd',
-              borderRadius: '8px',
-              textAlign: 'center',
-              color: '#666'
-            }}
-          >
-            <p style={{ margin: 0 }}>
-              No content to display — add <code>UserProfile</code> components here.
-            </p>
-          </div>
-        )}
-      </div>
+    <main style={mainStyle}>
+      <h2 style={{ color: 'navy', marginBottom: '10px' }}>Top Cities to Visit</h2>
+      <p style={paragraphStyle}>
+        Traveling opens up new perspectives and experiences. Here are some of my favorite cities:
+      </p>
+      <ul style={{ listStyleType: 'none', padding: 0 }}>
+        <li style={{ margin: '5px 0', color: '#555' }}>Cairo</li>
+        <li style={{ margin: '5px 0', color: '#555' }}>Paris</li>
+        <li style={{ margin: '5px 0', color: '#555' }}>Tokyo</li>
+      </ul>
     </main>
   );
 }
