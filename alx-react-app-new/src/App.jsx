@@ -3,18 +3,28 @@ import Header from './components/Header';
 import MainContent from './components/MainContent';
 import UserProfile from './components/UserProfile';
 import Footer from './components/Footer';
-import Counter from "./components/Counter"; 
-
+import Counter from "./components/Counter";
+import UserContext from './components/UserContext';
 
 function App() {
+  const userData = { 
+    name: "Sara Ahmed", 
+    age: 26, 
+    bio: "Front-end enthusiast who loves React." 
+  };
+
   return (
-    <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f2f6fb', minHeight: '100vh', paddingBottom: '20px' }}>
-      <Header />
-      <MainContent />
-      <Counter />
-      <UserProfile name="Sara Ahmed" age={26} bio="Front-end enthusiast who loves React." />
-      <Footer />
-    </div>
+    
+    <UserContext.Provider value={userData}>
+      <div style={{ fontFamily: 'Arial, sans-serif', backgroundColor: '#f2f6fb', minHeight: '100vh', paddingBottom: '20px' }}>
+        <Header />
+        <MainContent />
+        <Counter />
+       
+        <UserProfile />
+        <Footer />
+      </div>
+    </UserContext.Provider>
   );
 }
 
