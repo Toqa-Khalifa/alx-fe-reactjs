@@ -1,8 +1,13 @@
+// src/components/UserProfile.jsx
 import React, { useContext } from 'react';
 import UserContext from '../UserContext';
 
 function UserProfile() {
   const userData = useContext(UserContext);
+
+  if (!userData) {
+    return null;
+  }
 
   return (
     <div style={{ border: '1px solid gray', padding: '10px', margin: '10px' }}>
