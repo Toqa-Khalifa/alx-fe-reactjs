@@ -1,4 +1,3 @@
-// src/App.jsx
 import React from "react";
 import Header from "./components/Header";
 import MainContent from "./components/MainContent";
@@ -8,7 +7,11 @@ import Counter from "./components/Counter";
 import UserContext from "./UserContext";
 
 function App() {
-  const userData = { name: "Sara Ahmed", age: 26, bio: "Front-end enthusiast who loves React." };
+  const userData = {
+    name: "Sara Ahmed",
+    age: 26,
+    bio: "Front-end enthusiast who loves React."
+  };
 
   return (
     <UserContext.Provider value={userData}>
