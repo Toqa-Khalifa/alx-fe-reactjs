@@ -8,10 +8,11 @@ function MainContent() {
         padding: '20px',
         margin: '10px',
         borderRadius: '8px',
+        textAlign: 'center',
       }}
     >
-      <h2 style={{ color: 'darkgreen' }}>Main Content Section</h2>
-      <p>This is the main area of the page.</p>
+      <h2 style={{ color: 'darkgreen' }}>Main Content</h2>
+      <p>I love to visit New York, Paris, and Tokyo.</p>
     </main>
   );
 }
