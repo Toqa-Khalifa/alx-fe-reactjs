@@ -1,5 +1,9 @@
 import React from "react";
-import ProfilePage from "./ProfilePage";
+import Header from "./components/Header";
+import MainContent from "./components/MainContent";
+import UserProfile from "./components/UserProfile";
+import Footer from "./components/Footer";
+import Counter from "./components/Counter";
 import UserContext from "./UserContext";
 
 function App() {
@@ -10,7 +14,20 @@ function App() {
 
   return (
     <UserContext.Provider value={userData}>
-      <ProfilePage />
+      <div
+        style={{
+          fontFamily: "Arial, sans-serif",
+          backgroundColor: "#f2f6fb",
+          minHeight: "100vh",
+          paddingBottom: "20px",
+        }}
+      >
+        <Header />
+        <MainContent />
+        <Counter />
+        <UserProfile />
+        <Footer />
+      </div>
     </UserContext.Provider>
   );
 }
