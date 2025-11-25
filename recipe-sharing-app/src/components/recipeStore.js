@@ -1,30 +1,45 @@
-import create from 'zustand';
+import create from "zustand";
 
-const generateId = () => Date.now();
+export const useRecipeStore = create((set, get) => ({
+  recipes: [],
 
-const useRecipeStore = create(set => ({
-  recipes: [
-    { id: 101, title: 'Refreshing Fruit Salad', description: 'A delicious mix of seasonal fruits with a touch of honey.' },
-    { id: 102, title: 'Spicy Lentil Soup', description: 'Red lentils, cumin, carrots, and onions, served hot.' },
-      ],
-  
-  addRecipe: (newRecipe) => set(state => ({
-    recipes: [...state.recipes, { ...newRecipe, id: generateId() }]
-  })),
+  searchTerm: "",
+  setSearchTerm: (term) => {
+    set({ searchTerm: term });
+    get().filterRecipes(); 
+  },
 
-  deleteRecipe: (recipeId) => set(state => ({
-    recipes: state.recipes.filter(recipe => recipe.id !== recipeId)
-  })),
+  filteredRecipes: [],
 
-  updateRecipe: (updatedRecipe) => set(state => ({
-    recipes: state.recipes.map(recipe => 
-      recipe.id === updatedRecipe.id 
-        ? { ...recipe, ...updatedRecipe } 
-        : recipe
-    )
-  })),
-  
-  setRecipes: (recipes) => set({ recipes })
+  filterRecipes: () =>
+    set((state) => ({
+      filteredRecipes: state.recipes.filter((recipe) =>
+        recipe.title.toLowerCase().includes(state.searchTerm.toLowerCase())
+      ),
+    })),
+
+  addRecipe: (recipe) =>
+    set((state) => ({
+      recipes: [...state.recipes, recipe],
+      filteredRecipes: [...state.recipes, recipe],
+    })),
+
+  updateRecipe: (updatedRecipe) =>
+    set((state) => ({
+      recipes: state.recipes.map((r) =>
+        r.id === updatedRecipe.id ? updatedRecipe : r
+      ),
+      filteredRecipes: state.recipes.map((r) =>
+        r.id === updatedRecipe.id ? updatedRecipe : r
+      ),
+    })),
+
+  deleteRecipe: (id) =>
+    set((state) => ({
+      recipes: state.recipes.filter((r) => r.id !== id),
+      filteredRecipes: state.recipes.filter((r) => r.id !== id),
+    })),
 }));
+
 
 export default useRecipeStore;
