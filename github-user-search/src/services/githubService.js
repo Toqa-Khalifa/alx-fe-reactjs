@@ -1,37 +1,24 @@
 import axios from "axios";
 
 export const fetchAdvancedUsers = async (
-  query,
+  username,
   location,
   minRepos,
   page = 1
 ) => {
-  let q = query;
+  let query = username;
 
-  if (location) q += ` location:${location}`;
-  if (minRepos) q += ` repos:>=${minRepos}`;
+  if (location) {
+    query += `+location:${location}`;
+  }
 
-  const searchResponse = await axios.get(
-    "https://api.github.com/search/users",
-    {
-      params: {
-        q,
-        page,
-        per_page: 5,
-      },
-    }
+  if (minRepos) {
+    query += `+repos:>=${minRepos}`;
+  }
+
+  const response = await axios.get(
+    `https://api.github.com/search/users?q=${query}&page=${page}&per_page=10`
   );
 
-  const detailedUsers = await Promise.all(
-    searchResponse.data.items.map(async (user) => {
-      const detailResponse = await axios.get(
-        `https://api.github.com/users/${user.login}`
-      );
-      return detailResponse.data;
-    })
-  );
-
-  return {
-    items: detailedUsers,
-  };
+  return response.data;
 };
