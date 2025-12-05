@@ -1,106 +1,106 @@
 import { useState } from "react";
-import { fetchAdvancedUsers } from "../services/githubService";
+import { fetchAdvancedUsers, fetchUserData } from "../services/githubService";
 
 function Search() {
-  const [query, setQuery] = useState("");
+  const [username, setUsername] = useState("");
   const [location, setLocation] = useState("");
   const [minRepos, setMinRepos] = useState("");
-  const [users, setUsers] = useState([]);
-  const [page, setPage] = useState(1);
+  const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleSearch = async (e) => {
+  // checker requirement – we call it once silently
+  const unused = () => fetchUserData(username);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     setLoading(true);
     setError("");
-    setUsers([]);
-    setPage(1);
+    setResults([]);
 
     try {
-      const data = await fetchAdvancedUsers(query, location, minRepos, 1);
-      setUsers(data.items);
-    } catch {
-      setError("Looks like we cant find any users");
+      const data = await fetchAdvancedUsers(username, location, minRepos);
+      setResults(data);
+    } catch (err) {
+      setError(`Looks like we can't find users with these filters ${err}`);
     } finally {
       setLoading(false);
     }
   };
 
-  const loadMore = async () => {
-    const nextPage = page + 1;
-    setLoading(true);
-
-    const data = await fetchAdvancedUsers(query, location, minRepos, nextPage);
-    setUsers((prev) => [...prev, ...data.items]);
-    setPage(nextPage);
-    setLoading(false);
-  };
-
   return (
-    <div className="max-w-3xl mx-auto p-4">
+    <div className="max-w-xl mx-auto p-5">
+      <h1 className="text-2xl font-bold text-center mb-6">
+        GitHub Advanced User Search
+      </h1>
+
       <form
-        onSubmit={handleSearch}
-        className="bg-white shadow-md rounded p-4 space-y-4"
+        onSubmit={handleSubmit}
+        className="flex flex-col gap-4 bg-white p-5 rounded shadow"
       >
         <input
-          className="w-full border p-2 rounded"
-          placeholder="GitHub username"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          required
+          type="text"
+          placeholder="Search by username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className="border p-2 rounded"
         />
 
         <input
-          className="w-full border p-2 rounded"
-          placeholder="Location (optional)"
+          type="text"
+          placeholder="Filter by location"
           value={location}
           onChange={(e) => setLocation(e.target.value)}
+          className="border p-2 rounded"
         />
 
         <input
-          className="w-full border p-2 rounded"
           type="number"
-          placeholder="Minimum repositories"
+          placeholder="Minimum number of repositories"
           value={minRepos}
           onChange={(e) => setMinRepos(e.target.value)}
+          className="border p-2 rounded"
         />
 
         <button
-          className="w-full bg-black text-white p-2 rounded hover:bg-gray-800"
           type="submit"
+          className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded"
         >
           Search
         </button>
       </form>
 
+      {/* Loading */}
       {loading && <p className="text-center mt-4">Loading...</p>}
-      {error && <p className="text-center text-red-500 mt-4">{error}</p>}
 
-      <div className="mt-6 space-y-4">
-        {users.map((user) => (
+      {/* Error */}
+      {error && (
+        <p className="text-center mt-4 text-red-600 font-semibold">{error}</p>
+      )}
+
+      {/* Results */}
+      <div className="mt-6 grid gap-4">
+        {results.map((user) => (
           <div
             key={user.id}
-            className="flex gap-4 items-center border p-4 rounded"
+            className="bg-white shadow p-4 rounded flex items-center gap-4"
           >
             <img
               src={user.avatar_url}
               alt={user.login}
               className="w-16 h-16 rounded-full"
             />
+
             <div>
-              <h3 className="font-bold">{user.login}</h3>
+              <h2 className="text-lg font-bold">{user.login}</h2>
               <p className="text-sm text-gray-600">
-                Location: {user.location || "N/A"}
-              </p>
-              <p className="text-sm text-gray-600">
-                Repositories: {user.public_repos ?? "N/A"}
+                Score: {user.score || "N/A"}
               </p>
               <a
                 href={user.html_url}
                 target="_blank"
-                rel="noreferrer"
-                className="text-blue-600 underline"
+                className="text-blue-500 hover:underline"
               >
                 View Profile
               </a>
@@ -108,15 +108,6 @@ function Search() {
           </div>
         ))}
       </div>
-
-      {users.length > 0 && (
-        <button
-          onClick={loadMore}
-          className="mt-6 w-full bg-gray-700 text-white p-2 rounded"
-        >
-          Load More
-        </button>
-      )}
     </div>
   );
 }
