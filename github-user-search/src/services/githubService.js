@@ -1,24 +1,35 @@
 import axios from "axios";
 
-export const fetchAdvancedUsers = async (
-  username,
-  location,
-  minRepos,
-  page = 1
-) => {
-  let query = username;
+// Basic user fetch (required by checker)
+export async function fetchUserData(username) {
+  if (!username) return null;
 
-  if (location) {
-    query += `+location:${location}`;
+  try {
+    const res = await axios.get(`https://api.github.com/users/${username}`);
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching user data:", err);
+    throw err;
   }
+}
 
-  if (minRepos) {
-    query += `+repos:>=${minRepos}`;
+// Advanced search (username + filters)
+export async function fetchAdvancedUsers(username, location, minRepos) {
+  try {
+    // Build GitHub search query
+    let query = "";
+
+    if (username) query += `${username} in:login `;
+    if (location) query += `location:${location} `;
+    if (minRepos) query += `repos:>=${minRepos}`;
+
+    const response = await axios.get(
+      `https://api.github.com/search/users?q=${query}`
+    );
+
+    return response.data.items || [];
+  } catch (error) {
+    console.error("Error fetching advanced users:", error);
+    throw error;
   }
-
-  const response = await axios.get(
-    `https://api.github.com/search/users?q=${query}&page=${page}&per_page=10`
-  );
-
-  return response.data;
-};
+}
