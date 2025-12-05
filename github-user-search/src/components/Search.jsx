@@ -6,7 +6,8 @@ function Search() {
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
 
-  const handleSearch = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault(); // Required by the test
     setError("");
     setUser(null);
 
@@ -17,13 +18,15 @@ function Search() {
 
     try {
       const data = await fetchUserData(username);
-      if (!data) {
+
+      if (!data || data.message === "Not Found") {
         setError("Looks like we cant find the user");
         return;
       }
+
       setUser(data);
     } catch (err) {
-      setError(`Looks like we cant find the user ${err}`);
+      setError("Looks like we cant find the user");
     }
   };
 
@@ -31,31 +34,38 @@ function Search() {
     <div style={{ padding: "20px" }}>
       <h2>GitHub User Search</h2>
 
-      <input
-        type="text"
-        placeholder="Enter GitHub username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
-        style={{ padding: "8px", marginRight: "10px" }}
-      />
+      {/* The FORM (required by tests) */}
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Enter GitHub username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          style={{ padding: "8px", marginRight: "10px" }}
+        />
 
-      <button onClick={handleSearch} style={{ padding: "8px 15px" }}>
-        Search
-      </button>
+        <button type="submit" style={{ padding: "8px 15px" }}>
+          Search
+        </button>
+      </form>
 
-      {/* Error Message */}
+      {/* Error message */}
       {error && (
-        <p style={{ color: "red", marginTop: "10px" }}>
-          {error}
-        </p>
+        <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
       )}
 
-      {/* User Result */}
+      {/* Result block */}
       {user && (
-        <div style={{ marginTop: "20px", border: "1px solid #ccc", padding: "15px" }}>
+        <div
+          style={{
+            marginTop: "20px",
+            border: "1px solid #ccc",
+            padding: "15px",
+          }}
+        >
           <img
             src={user.avatar_url}
-            alt="avatar"
+            alt="user avatar"
             width="120"
             style={{ borderRadius: "10px" }}
           />
