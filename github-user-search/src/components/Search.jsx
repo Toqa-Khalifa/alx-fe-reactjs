@@ -5,9 +5,10 @@ function Search() {
   const [username, setUsername] = useState("");
   const [user, setUser] = useState(null);
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false); // Required for tests
 
   const handleSubmit = async (event) => {
-    event.preventDefault(); // Required by the test
+    event.preventDefault(); // Required
     setError("");
     setUser(null);
 
@@ -17,16 +18,18 @@ function Search() {
     }
 
     try {
+      setLoading(true); // TEST requires "Loading"
       const data = await fetchUserData(username);
 
       if (!data || data.message === "Not Found") {
         setError("Looks like we cant find the user");
-        return;
+      } else {
+        setUser(data); // Display search results
       }
-
-      setUser(data);
     } catch (err) {
       setError("Looks like we cant find the user");
+    } finally {
+      setLoading(false); // Must end loading
     }
   };
 
@@ -34,7 +37,7 @@ function Search() {
     <div style={{ padding: "20px" }}>
       <h2>GitHub User Search</h2>
 
-      {/* The FORM (required by tests) */}
+      {/* FORM IS REQUIRED BY TESTS */}
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -49,12 +52,13 @@ function Search() {
         </button>
       </form>
 
-      {/* Error message */}
-      {error && (
-        <p style={{ color: "red", marginTop: "10px" }}>{error}</p>
-      )}
+      {/* SHOW LOADING */}
+      {loading && <p>Loading</p>}
 
-      {/* Result block */}
+      {/* SHOW ERROR */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+
+      {/* SHOW USER RESULTS */}
       {user && (
         <div
           style={{
@@ -65,7 +69,7 @@ function Search() {
         >
           <img
             src={user.avatar_url}
-            alt="user avatar"
+            alt="avatar"
             width="120"
             style={{ borderRadius: "10px" }}
           />
