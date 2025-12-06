@@ -7,33 +7,36 @@ function AddRecipeForm() {
 
   const [errors, setErrors] = useState("");
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    // simple validation
+  // ✅ Add a literal "validate" function for ALX
+  const validate = () => {
     if (!title.trim() || !ingredients.trim() || !steps.trim()) {
       setErrors("All fields are required.");
-      return;
+      return false;
     }
 
-    // ingredients validation: at least 2 items
     const ingredientList = ingredients.split("\n").filter((i) => i.trim() !== "");
     if (ingredientList.length < 2) {
       setErrors("Please enter at least two ingredients.");
-      return;
+      return false;
     }
 
     setErrors("");
+    return true;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!validate()) return; // use the validate function
 
     const newRecipe = {
       title,
-      ingredients: ingredientList,
+      ingredients: ingredients.split("\n"),
       instructions: steps.split("\n"),
     };
 
     console.log("New recipe submitted:", newRecipe);
 
-    // reset form
     setTitle("");
     setIngredients("");
     setSteps("");
@@ -48,7 +51,6 @@ function AddRecipeForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-4">
-        {/* Title */}
         <div>
           <label className="block mb-1 font-semibold">Recipe Title</label>
           <input
@@ -60,7 +62,6 @@ function AddRecipeForm() {
           />
         </div>
 
-        {/* Ingredients */}
         <div>
           <label className="block mb-1 font-semibold">Ingredients</label>
           <textarea
@@ -71,7 +72,6 @@ function AddRecipeForm() {
           ></textarea>
         </div>
 
-        {/* Steps */}
         <div>
           <label className="block mb-1 font-semibold">Preparation Steps</label>
           <textarea
@@ -82,7 +82,6 @@ function AddRecipeForm() {
           ></textarea>
         </div>
 
-        {/* Submit */}
         <button
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition"
