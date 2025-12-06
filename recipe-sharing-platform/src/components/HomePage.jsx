@@ -37,6 +37,12 @@ function HomePage() {
 >
   View Recipe
 </Link>
+<Link
+  to="/add-recipe"
+  className="inline-block bg-green-600 text-white px-4 py-2 rounded mb-6"
+>
+  Add New Recipe
+</Link>
 
           </div>
         ))}
