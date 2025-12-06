@@ -1,11 +1,7 @@
 export default {
-  content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
-    "./public/index.html"
-  ],
-  darkMode: false,
+  content: ["./index.html", "./src/**/*.{js,jsx}"],
   theme: {
     extend: {},
   },
   plugins: [],
-};
+}
